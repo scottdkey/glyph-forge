@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "module": "CommonJS",
-    "lib": ["dom", "es6", "es2017", "esnext.asynciterable"],
-    "sourceMap": false,
+    "target": "ES2022",
+    "module": "NodeNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "sourceMap": true,
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": ".",
     "strict": true,
-    "types": ["node"],
+    "types": ["node", "jest"],
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
@@ -17,6 +17,16 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "removeComments": true
-  }
+    "removeComments": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "declarationMap": true,
+    "isolatedModules": true,
+    "noImplicitOverride": true,
+    "useUnknownInCatchVariables": true,
+    "noPropertyAccessFromIndexSignature": true
+  },
+  "include": ["src/**/*", "src/examples/glyph-forge.config.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
