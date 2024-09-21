@@ -1,10 +1,8 @@
-// src/cli.ts
-
 import { Command } from 'commander';
 import { GlyphForge } from './index.js';
 import path from 'path';
 import { logger } from './logger.js';
-import { Config, ConfigSchema } from './lib/schemas/Config.schema.js';
+import { ConfigSchema } from './lib/schemas/Config.schema.js';
 
 const program = new Command();
 
@@ -26,25 +24,47 @@ program
       // Remove any surrounding quotes and escape characters
       const cleanConfigPath = options.config.replace(/^['"]|['"]$/g, '').replace(/\\+/g, '/');
       const configPath = path.resolve(cleanConfigPath);
-      logger.info(options, 'Original config:');
-      logger.info(configPath, 'Config path:');
+      logger.info({ configPath }, 'Attempting to load config from:');
 
-      // Dynamically import the config file
-      const configModule = await import(configPath);
-      let config: Config = configModule.default || configModule;
+      try {
+        // Dynamically import the config file
+        const configModule = await import(configPath);
+        logger.info('Config module imported successfully');
 
-      // Validate the config
-      config = ConfigSchema.parse(config);
+        let config = configModule.default || configModule;
+        logger.info({ config }, 'Loaded config object:');
 
-      // Override output path if specified in CLI
-      if (options.output) {
-        config.outputPath = path.resolve(options.output);
+        // Validate the config
+        config = ConfigSchema.parse(config);
+        logger.info('Config validated successfully');
+
+        // Override output path if specified in CLI
+        if (options.output) {
+          config.outputPath = path.resolve(options.output);
+        }
+
+        const glyphForge = new GlyphForge(config);
+        await glyphForge.forge();
+      } catch (importError: unknown) {
+        logger.error(
+          {
+            error: importError,
+            message: importError instanceof Error ? importError.message : 'Unknown error',
+            stack: importError instanceof Error ? importError.stack : 'No stack trace',
+          },
+          'Error importing or parsing config file:',
+        );
+        process.exit(1);
       }
-
-      const glyphForge = new GlyphForge(config);
-      await glyphForge.forge();
-    } catch (error) {
-      logger.error('An error occurred:', error);
+    } catch (error: unknown) {
+      logger.error(
+        {
+          error,
+          message: error instanceof Error ? error.message : 'Unknown error',
+          stack: error instanceof Error ? error.stack : 'No stack trace',
+        },
+        'An unexpected error occurred:',
+      );
       process.exit(1);
     }
   });

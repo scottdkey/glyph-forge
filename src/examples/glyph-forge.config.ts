@@ -1,10 +1,12 @@
 import path from 'path';
-import { z } from 'zod';
-import { ConfigSchema } from '../lib/schemas/Config.schema.js';
+import { fileURLToPath } from 'url';
 
-const projectRoot = path.resolve(__dirname, '..');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const Config: z.infer<typeof ConfigSchema> = {
+const projectRoot = path.resolve(__dirname, '..', '..');
+
+export default {
   sources: ['https://api.yuber.app/docs.json', 'https://accounts.yuber.app/docs.json'],
   outputPath: path.join(projectRoot, 'output'),
   options: {
@@ -15,5 +17,3 @@ const Config: z.infer<typeof ConfigSchema> = {
     concurrent: 3,
   },
 };
-
-export default Config;

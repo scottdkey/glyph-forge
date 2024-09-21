@@ -27,6 +27,6 @@
     "useUnknownInCatchVariables": true,
     "noPropertyAccessFromIndexSignature": true
   },
-  "include": ["src/**/*", "src/examples/glyph-forge.config.ts"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "include": ["src/**/*", "src/examples/glyph-forge.config.ts", "eslint.config.js"],
+  "exclude": ["node_modules", "**/*.spec.ts", "output"]
 }

@@ -11,15 +11,19 @@ export default tseslint.config(
       parserOptions: {
         project: './tsconfig.json',
       },
-      globals: {
-        module: 'readonly',
-      },
     },
     rules: {
-      // Add any custom rules here
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
   {
-    ignores: ['dist/**', 'node_modules/**', 'output/**'],
+    files: ['**/*.js', '*.js'],
+    ...eslint.configs.recommended,
+    rules: {
+      // Add any specific rules for JS files here
+    },
+  },
+  {
+    ignores: ['node_modules/**', 'output/**', 'dist/**'],
   },
 );
