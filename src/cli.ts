@@ -1,7 +1,7 @@
 // src/cli.ts
 
 import { Command } from 'commander';
-import { createGlyphForge } from './index.js';
+import { GlyphForge } from './index.js';
 import path from 'path';
 import { logger } from './logger.js';
 import { Config, ConfigSchema } from './lib/schemas/Config.schema.js';
@@ -41,7 +41,7 @@ program
         config.outputPath = path.resolve(options.output);
       }
 
-      const glyphForge = createGlyphForge(config);
+      const glyphForge = new GlyphForge(config);
       await glyphForge.forge();
     } catch (error) {
       logger.error('An error occurred:', error);
